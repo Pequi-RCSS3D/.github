@@ -2,6 +2,11 @@ name: Python CI
 
 on:
   workflow_call:
+    inputs:
+      sync-args:
+        description: Extra arguments for uv sync, e.g. "--extra cpu".
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -9,13 +14,13 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
-      - run: uv sync --locked
+      - run: uv sync --locked ${{ inputs.sync-args }}
       - name: Hooks
         run: uv run --locked pre-commit run --all-files --show-diff-on-failure
       - name: Tests
