@@ -1,0 +1,22 @@
+name: Python CI
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - name: Hooks
+        run: uv run --locked pre-commit run --all-files --show-diff-on-failure
+      - name: Tests
+        run: uv run --locked pytest

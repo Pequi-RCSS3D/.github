@@ -1,0 +1,14 @@
+name: Task
+description: A feature, skill or experiment.
+body:
+  - type: textarea
+    attributes:
+      label: Goal
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Done when
+      description: Metric, test or demo.
+    validations:
+      required: true

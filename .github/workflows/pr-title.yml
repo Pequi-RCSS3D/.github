@@ -1,0 +1,22 @@
+name: PR title
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  conventional:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      # The title becomes the squash commit on main.
+      - env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          if ! printf '%s' "$TITLE" | grep -Eq \
+            '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9-]+\))?!?: .+'
+          then
+            echo "::error::Invalid PR title: $TITLE"
+            exit 1
+          fi
